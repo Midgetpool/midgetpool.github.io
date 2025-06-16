@@ -240,6 +240,9 @@ if (contactForm) {
     fetch(action, {
       method: 'POST',
       body: formData
+       headers: {
+    'Accept': 'application/json'
+      }
     })
     .then(() => {
       thisForm.reset(); // clear the form on success
