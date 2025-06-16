@@ -225,5 +225,29 @@
   }
   window.addEventListener('load', navmenuScrollspy);
   document.addEventListener('scroll', navmenuScrollspy);
+/**
+ * Minimal contact form submission — no message, just refresh form
+ */
+const contactForm = document.querySelector('.php-email-form');
+if (contactForm) {
+  contactForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const thisForm = this;
+    const action = thisForm.getAttribute('action');
+    const formData = new FormData(thisForm);
+
+    fetch(action, {
+      method: 'POST',
+      body: formData
+    })
+    .then(() => {
+      thisForm.reset(); // clear the form on success
+    })
+    .catch(() => {
+      thisForm.reset(); // still clear the form even on error
+    });
+  });
+}
 
 })();
