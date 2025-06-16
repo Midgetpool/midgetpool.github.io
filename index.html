@@ -844,7 +844,7 @@
                 <div class="col-md-12 text-center">
                   <div class="loading">Loading</div>
                   <div class="error-message"></div>
-                  <div class="sent-message">Your message has been sent. Thank you!</div>
+                  <div class="sent-message" style="display:none">Your message has been sent. Thank you!</div>
                   <input type="text" name="_gotcha" style="display:none">
                   <button type="submit" style="background-color: var(--nav-hover-color);">Send Message</button>
                 </div>
@@ -892,6 +892,29 @@
 
   <!-- Main JS File -->
   <script src="assets/js/main.js"></script>
+  <script>
+window.addEventListener("DOMContentLoaded", function () {
+  const form = document.querySelector("form");
+  const status = document.querySelector(".sent-message");
+
+  form.addEventListener("submit", async function (ev) {
+    ev.preventDefault();
+    const data = new FormData(form);
+    const action = form.getAttribute("action");
+    const response = await fetch(action, {
+      method: "POST",
+      body: data,
+      headers: {
+        'Accept': 'application/json'
+      }
+    });
+    if (response.ok) {
+      status.style.display = "block";
+      form.reset();
+    }
+  });
+});
+</script> 
 
 </body>
 
