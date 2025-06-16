@@ -225,5 +225,50 @@
   }
   window.addEventListener('load', navmenuScrollspy);
   document.addEventListener('scroll', navmenuScrollspy);
+  /**
+   * Contact form submission via AJAX
+   */
+  const contactForm = document.querySelector('.php-email-form');
+  if (contactForm) {
+    contactForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const thisForm = this;
+      const action = thisForm.getAttribute('action');
+      const formData = new FormData(thisForm);
+
+      // Clear previous messages
+      const sentMessage = thisForm.querySelector('.sent-message');
+      const errorMessage = thisForm.querySelector('.error-message');
+      if (sentMessage) sentMessage.classList.remove('d-block');
+      if (errorMessage) errorMessage.classList.remove('d-block');
+
+      fetch(action, {
+        method: 'POST',
+        body: formData
+      })
+        .then(response => response.text())
+        .then(data => {
+          if (data.includes('"ok":true')) {
+            if (sentMessage) {
+              sentMessage.textContent = 'Thank you! Your message has been sent.';
+              sentMessage.classList.add('d-block');
+            }
+            thisForm.reset();
+          } else {
+            if (errorMessage) {
+              errorMessage.textContent = 'Something went wrong: ' + data;
+              errorMessage.classList.add('d-block');
+            }
+          }
+        })
+        .catch(error => {
+          if (errorMessage) {
+            errorMessage.textContent = 'Form submission failed! ' + error;
+            errorMessage.classList.add('d-block');
+          }
+        });
+    });
+  }
 
 })();
